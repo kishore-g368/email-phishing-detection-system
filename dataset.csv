@@ -1,0 +1,17 @@
+text,label
+"URGENT verify your account immediately click here",phishing
+"Your bank account has been suspended login now",phishing
+"Congratulations you won a prize claim now",phishing
+"Confirm your password immediately",phishing
+"Security alert verify your account",phishing
+"Click here to update your banking information",phishing
+"Your account will be blocked verify now",phishing
+"Limited time offer claim your prize",phishing
+"Hello, our project meeting is tomorrow at 10 AM",legitimate
+"Please find the project report attached",legitimate
+"Your class schedule has been updated",legitimate
+"Meeting reminder for tomorrow",legitimate
+"Thank you for submitting your assignment",legitimate
+"Please attend the computer science seminar",legitimate
+"Your library book is due next week",legitimate
+"Project discussion is scheduled for Monday",legitimate

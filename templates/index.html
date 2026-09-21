@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cyber Security Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡️
+        </div>
+
+        <div>
+            <h1>CYBER SECURITY CENTER</h1>
+            <p>Email Phishing Detection & Threat Intelligence</p>
+        </div>
+
+    </div>
+
+
+    <div class="system-status">
+
+        <span class="online-dot"></span>
+
+        <span>SYSTEM ONLINE</span>
+
+        {% if session.get("user_id") %}
+
+        <div class="user-box">
+            👤 {{ session.get("user_email") }}
+        </div>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-btn">
+            Logout
+        </a>
+
+        {% else %}
+
+        <button class="login-btn"
+                onclick="openLogin()">
+            Login
+        </button>
+
+        {% endif %}
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN DASHBOARD
+===================================================== -->
+
+<main class="dashboard">
+
+
+    <!-- PAGE TITLE -->
+
+    <div class="dashboard-title">
+
+        <div>
+
+            <h2>
+                Security Operations Dashboard
+            </h2>
+
+            <p>
+                Real-time email phishing and URL threat analysis
+            </p>
+
+        </div>
+
+        <div class="security-status">
+
+            <span class="status-shield">
+                🛡️
+            </span>
+
+            <div>
+
+                <strong>
+                    AI SECURITY ENGINE
+                </strong>
+
+                <small>
+                    ACTIVE
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         THREAT OVERVIEW
+    ===================================================== -->
+
+    <section class="overview-grid">
+
+
+        <!-- TOTAL -->
+
+        <div class="security-card blue-card">
+
+            <div class="card-icon">
+                🛡️
+            </div>
+
+            <div class="card-content">
+
+                <span>
+                    TOTAL SCANS
+                </span>
+
+                <strong>
+                    {{ total }}
+                </strong>
+
+                <small>
+                    Security Events
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PHISHING -->
+
+        <div class="security-card red-card">
+
+            <div class="card-icon">
+                🚨
+            </div>
+
+            <div class="card-content">
+
+                <span>
+                    HIGH THREATS
+                </span>
+
+                <strong>
+                    {{ phishing }}
+                </strong>
+
+                <small>
+                    Phishing Detected
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SUSPICIOUS -->
+
+        <div class="security-card yellow-card">
+
+            <div class="card-icon">
+                ⚠️
+            </div>
+
+            <div class="card-content">
+
+                <span>
+                    MEDIUM THREATS
+                </span>
+
+                <strong>
+                    {{ suspicious }}
+                </strong>
+
+                <small>
+                    Suspicious Activity
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- LEGITIMATE -->
+
+        <div class="security-card green-card">
+
+            <div class="card-icon">
+                ✅
+            </div>
+
+            <div class="card-content">
+
+                <span>
+                    SAFE EMAILS
+                </span>
+
+                <strong>
+                    {{ legitimate }}
+                </strong>
+
+                <small>
+                    Legitimate Messages
+                </small>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         MONITORING ROW
+    ===================================================== -->
+
+    <section class="monitor-grid">
+
+
+        <!-- THREAT MONITOR -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <h3>
+                    📊 THREAT MONITOR
+                </h3>
+
+                <span class="live-label">
+                    ● LIVE
+                </span>
+
+            </div>
+
+
+            <div class="threat-monitor">
+
+
+                <div class="monitor-item">
+
+                    <span>
+                        Phishing Threats
+                    </span>
+
+                    <div class="progress">
+
+                        <div
+                            class="progress-red"
+                            style="width: {{ phishing * 20 }}%;">
+                        </div>
+
+                    </div>
+
+                    <strong>
+                        {{ phishing }}
+                    </strong>
+
+                </div>
+
+
+
+                <div class="monitor-item">
+
+                    <span>
+                        Suspicious Events
+                    </span>
+
+                    <div class="progress">
+
+                        <div
+                            class="progress-yellow"
+                            style="width: {{ suspicious * 20 }}%;">
+                        </div>
+
+                    </div>
+
+                    <strong>
+                        {{ suspicious }}
+                    </strong>
+
+                </div>
+
+
+
+                <div class="monitor-item">
+
+                    <span>
+                        Safe Communications
+                    </span>
+
+                    <div class="progress">
+
+                        <div
+                            class="progress-green"
+                            style="width: {{ legitimate * 20 }}%;">
+                        </div>
+
+                    </div>
+
+                    <strong>
+                        {{ legitimate }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SECURITY STATUS -->
+
+        <div class="panel security-panel">
+
+            <div class="panel-header">
+
+                <h3>
+                    🎯 SECURITY STATUS
+                </h3>
+
+            </div>
+
+
+            <div class="security-center">
+
+                <div class="radar">
+
+                    <div class="radar-ring ring-one"></div>
+
+                    <div class="radar-ring ring-two"></div>
+
+                    <div class="radar-ring ring-three"></div>
+
+                    <div class="radar-core">
+                        🛡️
+                    </div>
+
+                </div>
+
+
+                <h3>
+                    SYSTEM PROTECTED
+                </h3>
+
+                <p>
+                    AI Threat Detection Engine
+                </p>
+
+                <span class="protected">
+                    ● PROTECTION ACTIVE
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         EMAIL THREAT ANALYZER
+    ===================================================== -->
+
+    <section class="panel analyzer-panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <h3>
+                    🔍 EMAIL THREAT ANALYZER
+                </h3>
+
+                <p>
+                    Analyze email content for phishing indicators
+                </p>
+
+            </div>
+
+            <span class="engine-badge">
+                AI ENGINE
+            </span>
+
+        </div>
+
+
+
+        <form method="POST">
+
+
+            <textarea
+                name="email"
+                placeholder="Paste suspicious email content here..."
+                required>{{ email_text }}</textarea>
+
+
+            <div class="analyzer-footer">
+
+                <span>
+                    🔒 Secure local analysis
+                </span>
+
+                <button
+                    type="submit"
+                    class="analyze-btn">
+
+                    🔍 ANALYZE THREAT
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         RESULT
+    ===================================================== -->
+
+    {% if final_result %}
+
+    <section class="panel">
+
+
+        <div class="panel-header">
+
+            <h3>
+                🚨 THREAT ANALYSIS RESULT
+            </h3>
+
+            <span class="engine-badge">
+                SCAN COMPLETE
+            </span>
+
+        </div>
+
+
+        <div class="result-grid">
+
+
+            <div class="result-box">
+
+                <span>
+                    ML PREDICTION
+                </span>
+
+                {% if result == "phishing" %}
+
+                <strong class="danger-text">
+                    PHISHING
+                </strong>
+
+                {% else %}
+
+                <strong class="safe-text">
+                    LEGITIMATE
+                </strong>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="result-box">
+
+                <span>
+                    RISK LEVEL
+                </span>
+
+                <strong
+                    class="{% if risk == 'HIGH' %}
+                    danger-text
+                    {% elif risk == 'MEDIUM' %}
+                    warning-text
+                    {% else %}
+                    safe-text
+                    {% endif %}">
+
+                    {{ risk }}
+
+                </strong>
+
+            </div>
+
+
+            <div class="result-box">
+
+                <span>
+                    SECURITY SCORE
+                </span>
+
+                <strong class="score-text">
+                    {{ final_score }}%
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+        {% if final_result == "PHISHING" %}
+
+        <div class="alert danger-alert">
+
+            <h2>
+                🚨 PHISHING THREAT DETECTED
+            </h2>
+
+            <p>
+                High-risk indicators were identified in this email.
+            </p>
+
+        </div>
+
+
+        {% elif final_result == "SUSPICIOUS" %}
+
+        <div class="alert warning-alert">
+
+            <h2>
+                ⚠️ SUSPICIOUS ACTIVITY DETECTED
+            </h2>
+
+            <p>
+                Suspicious indicators were identified.
+            </p>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="alert safe-alert">
+
+            <h2>
+                ✅ NO MAJOR THREAT DETECTED
+            </h2>
+
+            <p>
+                No major phishing indicators were detected.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+    </section>
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+         URL INTELLIGENCE
+    ===================================================== -->
+
+    {% if url_results %}
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <h3>
+                🔗 URL INTELLIGENCE
+            </h3>
+
+            <span class="engine-badge">
+                URL ANALYZER
+            </span>
+
+        </div>
+
+
+        {% for url in url_results %}
+
+        <div class="url-intelligence">
+
+
+            <div class="url-main">
+
+                <span>
+                    URL
+                </span>
+
+                <strong>
+                    {{ url.url }}
+                </strong>
+
+            </div>
+
+
+            <div class="url-details">
+
+                <div>
+
+                    <span>
+                        DOMAIN
+                    </span>
+
+                    <strong>
+                        {{ url.domain }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        RISK
+                    </span>
+
+                    <strong>
+
+                        {% if url.risk == "HIGH" %}
+
+                        <b class="danger-text">
+                            HIGH
+                        </b>
+
+                        {% elif url.risk == "MEDIUM" %}
+
+                        <b class="warning-text">
+                            MEDIUM
+                        </b>
+
+                        {% else %}
+
+                        <b class="safe-text">
+                            LOW
+                        </b>
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        SCORE
+                    </span>
+
+                    <strong>
+                        {{ url.score }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            {% if url.reasons %}
+
+            <div class="reasons">
+
+                <span>
+                    DETECTION REASONS
+                </span>
+
+                <ul>
+
+                    {% for reason in url.reasons %}
+
+                    <li>
+                        {{ reason }}
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </section>
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+         ML PERFORMANCE
+    ===================================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <h3>
+                🤖 AI MODEL PERFORMANCE
+            </h3>
+
+        </div>
+
+
+        <div class="metrics-grid">
+
+
+            <div class="metric-box">
+
+                <span>
+                    ACCURACY
+                </span>
+
+                <strong>
+                    {{ accuracy }}%
+                </strong>
+
+            </div>
+
+
+            <div class="metric-box">
+
+                <span>
+                    PRECISION
+                </span>
+
+                <strong>
+                    {{ precision }}%
+                </strong>
+
+            </div>
+
+
+            <div class="metric-box">
+
+                <span>
+                    RECALL
+                </span>
+
+                <strong>
+                    {{ recall }}%
+                </strong>
+
+            </div>
+
+
+            <div class="metric-box">
+
+                <span>
+                    F1 SCORE
+                </span>
+
+                <strong>
+                    {{ f1 }}%
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         MODEL COMPARISON
+    ===================================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <h3>
+                🧠 ML MODEL COMPARISON
+            </h3>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>MODEL</th>
+                        <th>ACCURACY</th>
+                        <th>PRECISION</th>
+                        <th>RECALL</th>
+                        <th>F1 SCORE</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for model in model_comparison %}
+
+                    <tr>
+
+                        <td>
+                            {{ model.name }}
+                        </td>
+
+                        <td>
+                            {{ model.accuracy }}%
+                        </td>
+
+                        <td>
+                            {{ model.precision }}%
+                        </td>
+
+                        <td>
+                            {{ model.recall }}%
+                        </td>
+
+                        <td>
+                            {{ model.f1 }}%
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCAN HISTORY
+    ===================================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h3>
+                    📋 RECENT SECURITY ACTIVITY
+                </h3>
+
+                <p>
+                    Email scanning history
+                </p>
+
+            </div>
+
+            <span class="engine-badge">
+                DATABASE
+            </span>
+
+        </div>
+
+
+        {% if history %}
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>DATE</th>
+                        <th>ML RESULT</th>
+                        <th>URL RISK</th>
+                        <th>FINAL RESULT</th>
+                        <th>RISK</th>
+                        <th>SCORE</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for scan in history %}
+
+                    <tr>
+
+                        <td>
+                            #{{ scan[0] }}
+                        </td>
+
+                        <td>
+                            {{ scan[1] }}
+                        </td>
+
+                        <td>
+
+                            {% if scan[2] == "phishing" %}
+
+                            <span class="badge danger-badge">
+                                PHISHING
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge safe-badge">
+                                LEGITIMATE
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ scan[4] }}
+                        </td>
+
+
+                        <td>
+
+                            {% if scan[5] == "PHISHING" %}
+
+                            <span class="badge danger-badge">
+                                PHISHING
+                            </span>
+
+                            {% elif scan[5] == "SUSPICIOUS" %}
+
+                            <span class="badge warning-badge">
+                                SUSPICIOUS
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge safe-badge">
+                                LEGITIMATE
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ scan[6] }}
+                        </td>
+
+
+                        <td>
+                            {{ scan[7] }}%
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="empty-history">
+
+            📭 No security activity recorded yet.
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div>
+        🛡️ CYBER SECURITY CENTER
+    </div>
+
+    <small>
+        Email Phishing Detection System |
+        AI-Based Threat Analysis
+    </small>
+
+</footer>
+
+
+
+<!-- =====================================================
+     LOGIN MODAL
+===================================================== -->
+
+<div
+    id="loginModal"
+    class="login-modal">
+
+
+    <div class="login-box">
+
+
+        <button
+            class="close-btn"
+            onclick="closeLogin()">
+
+            ×
+
+        </button>
+
+
+        <div class="login-shield">
+            🔐
+        </div>
+
+
+        <h2>
+            Secure Login
+        </h2>
+
+
+        <p>
+            Access Cyber Security Center
+        </p>
+
+
+        <form
+            method="POST"
+            action="{{ url_for('login') }}">
+
+
+            <label>
+                Email
+            </label>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter email"
+                required>
+
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                required>
+
+
+            <button
+                type="submit"
+                class="login-submit">
+
+                🔐 AUTHENTICATE
+
+            </button>
+
+        </form>
+
+
+        {% if login_error %}
+
+        <div class="login-error">
+            {{ login_error }}
+        </div>
+
+        {% endif %}
+
+
+        <div class="demo-login">
+
+            <span>
+                DEMO CREDENTIALS
+            </span>
+
+            <small>
+                kishore@example.com
+            </small>
+
+            <small>
+                Password: Kishore@123
+            </small>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+function openLogin() {
+
+    document.getElementById("loginModal")
+        .style.display = "flex";
+
+}
+
+
+function closeLogin() {
+
+    document.getElementById("loginModal")
+        .style.display = "none";
+
+}
+
+
+window.onclick = function(event) {
+
+    const modal =
+        document.getElementById("loginModal");
+
+    if (event.target === modal) {
+
+        closeLogin();
+
+    }
+
+};
+
+
+{% if login_error %}
+
+openLogin();
+
+{% endif %}
+
+</script>
+
+
+</body>
+
+</html>
